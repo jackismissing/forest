@@ -1,0 +1,29 @@
+// index.jade - main view
+extends layout
+
+block content
+	h1= title
+	div
+		ul#tweets
+	div
+		ul
+
+		each tweet in tweets
+			li #{tweet._id}
+			li #{tweet.screenName}
+			li #{tweet.text}
+			li #{tweet.tweetData}
+	hr
+
+	form(action="/addtweet", method="post")
+		table(border="1") 
+			tr
+				td Item text: 
+				td 
+					input(name="item[text]", type="textbox")
+			tr
+				td Item scree name: 
+				td 
+					input(name="item[screen_name]", type="textbox")
+			
+		input(type="submit", value="Add item")
