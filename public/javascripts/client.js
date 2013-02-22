@@ -38,7 +38,8 @@ function startSocket() {
 	socket.on('tree', function(data) {
 		console.log('[tree] : new tree!');
 		/* Add processing drawTree call() */
-		Processing.getInstanceById('processing-canvas').growTree()
+		Processing.getInstanceById('processing-canvas').growTree();
+
 	});
 
 }

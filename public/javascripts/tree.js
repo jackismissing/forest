@@ -89,7 +89,7 @@ class Tree {
 
       /* @pjs preload="img/decor.jpg" */
 
-      
+
       PImage background;
 
 
@@ -99,7 +99,7 @@ class Tree {
 
       size(2560, 1440);
 
-      background = loadImage("decor.jpg");
+      background = loadImage("img/image.jpeg");
 
       image(background,0,0);
 
