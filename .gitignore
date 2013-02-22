@@ -2,3 +2,4 @@
 *.bak
 *~.bak
 *~tmp.bak
+server.log
