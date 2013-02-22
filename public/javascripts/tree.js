@@ -1,17 +1,3 @@
-<html>
-<head>
-	<title>Click It</title>
-</head>
-<body>
-
-	<section>
-		<article id="processing">
-
-		</article>
-	</section>
-
-	<script src="processing.js"></script>
-	<script type="text/processing" data-processing-target="processing-canvas">
  		class Tree {
 
   float leafColor;
@@ -93,13 +79,4 @@ void draw() {
 
 }
 
-
-
 }
-
-
- </script>
-11 <canvas id="processing-canvas"> </canvas>
-
-</body>
-</html>

@@ -8,8 +8,6 @@
 /* Modules */
 var express = require('express'),
 	sys = require('sys'),
-	routes = require('./routes'),
-	user = require('./routes/user'),
 	http = require('http'),
 	path = require('path'),
 	jade = require('jade'),
@@ -158,7 +156,8 @@ io.sockets.on('connection', function( socket ) {
 });
 
 //twit.stream('statuses/filter', {'track':'#jpogobelins, #goblins'}, function( stream ) {
-twit.stream('statuses/filter', {'track':'#gobelins,#jpogobelins,#jpo2013gobelins'}, function( stream ) {
+// twit.stream('statuses/filter', {'track':'#gobelins,#jpogobelins,#jpo2013gobelins'}, function( stream ) {
+twit.stream('statuses/filter', {'track':'#ps4'}, function( stream ) {
 	/* on data */
 	stream.on('data',function( data ){
 		console.log(c_main('[main]') +'['+data.created_at+'] '+ c_socket('@'+data.user.screen_name)+'  '+data.text+ ' [#'+data.id_str+']');
