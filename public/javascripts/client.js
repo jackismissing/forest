@@ -18,15 +18,16 @@ function startSocket() {
 	/* Create socket */
 	var socket = io.connect();
 
-	socket.join('client', function() {
-		console.log('[socket] asked to join channel client');
-	});
+
 	/* Get some output */
 	socket.on('connecting', function() {
 		console.log('[socket] connecting');
 	});
 	socket.on('connect', function() {
 		console.log('[socket] connected');
+		// socket.join('client', function() {
+		// 	console.log('[socket] asked to join channel client');
+		// });
 
 	});
 	socket.on('connect_failed', function() {
@@ -36,6 +37,7 @@ function startSocket() {
 	/* Manage twitter */
 	socket.on('tree', function(data) {
 		console.log('[tree] : new tree!');
+		/* Add processing drawTree call() */
 	});
 
 }

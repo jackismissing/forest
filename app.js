@@ -95,7 +95,7 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 
 /* Socket - DEBUG MODE ACTIVATED */
 var io  = require('socket.io').listen(server, { log: true});
-io.set('log level', 3);
+io.set('log level', 1);
 
 // app.get('/', tweetList.showTweets.bind(tweetList));
 app.get('/', function(req, res) {
@@ -146,7 +146,7 @@ var doBlink = function(entities) {
 io.sockets.on('connection', function( socket ) {
 	console.log( c_socket('[socket]') + ' connection ');
 	socket.emit('You are connected ! ');
-	
+
 	/* Detect room */
 	socket.on('channel', function( room ) {
 		console.log( c_socket('[socket]') + ' room request ' + room);
@@ -163,7 +163,7 @@ twit.stream('statuses/filter', {'track':'#ps4'}, function( stream ) {
 		console.log(c_main('[main]') +'['+data.created_at+'] '+ c_socket('@'+data.user.screen_name)+'  '+data.text+ ' [#'+data.id_str+']');
 		doBlink(data.entities);
 
-		io.sockets.in('client').emit('tree', data);
+		io.sockets.emit('tree', data);
 
 	});
 
