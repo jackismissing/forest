@@ -14,6 +14,7 @@
  * @desc Create and manage socket
  * @return void
  */
+
 function startSocket() {
 	/* Create socket */
 	var socket = io.connect();
@@ -38,11 +39,24 @@ function startSocket() {
 	socket.on('tree', function(data) {
 		console.log('[tree] : new tree!');
 		/* Add processing drawTree call() */
-		Processing.getInstanceById('processing-canvas').growTree();
+		// Processing.getInstanceById('processing-canvas').growTree();
+		createATree();
+	});
+
+	socket.on('trees', function(data) {
+		console.log('[trees] : whole lot of trees!');
+		/* Add processing drawTree call() */
+		for(i = 0; i < data.length; i++) {
+			createATree();
+		}
 
 	});
 
 }
+
+var createATree = function() {
+	Processing.getInstanceById('processing-canvas').growTree();
+};
 
 /* Unusable at this time */
 /**

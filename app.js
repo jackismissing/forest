@@ -39,7 +39,7 @@ var twit = new twitter({
 
 /* EventDuino */
 var eventduino = require('eventduino');
-var ardy = new eventduino({ serialport: '/dev/tty.usbmodem411' });
+var ardy = new eventduino({ serialport: '/dev/tty.usbmodem621' });
 
 ardy.on('get', function (args) {
   console.log("pin " + args[0] + " is set to " + args[1]);
@@ -97,6 +97,29 @@ var server = http.createServer(app).listen(app.get('port'), function() {
 var io  = require('socket.io').listen(server, { log: true});
 io.set('log level', 1);
 
+/* Database & Models - MongoDB + Mangoose \o/ - even if I prefer otters. Or meerkats. Meerkats are awesome dude! */
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/jpogobelins');
+
+var Tweets = require('./routes/tweets');
+var tweets = new Tweets();
+
+/* SOCKETS */
+io.sockets.on('connection', function( socket ) {
+	console.log( c_socket('[socket]') + ' connection ');
+	socket.emit('You are connected ! ');
+
+	setTimeout(doSendTrees, 5000);
+
+	/* Detect room */
+	socket.on('channel', function( room ) {
+		console.log( c_socket('[socket]') + ' room request ' + room);
+		socket.emit('You are in room : ', room);
+		socket.join(room);
+
+	});
+});
+
 // app.get('/', tweetList.showTweets.bind(tweetList));
 app.get('/', function(req, res) {
 	res.render('tree');
@@ -105,6 +128,14 @@ app.get('/', function(req, res) {
 /* SHOWTIME! */
 
 console.log(c_main('[main]') + ' -- Application started');
+
+var doSendTrees = function(items) {
+	console.log('doSendTrees called()');
+	trees = tweets.getAllTrees(function(items) {
+		console.log('got all trees!');
+		io.sockets.emit('trees', items);
+	});
+}
 
 var doBlink = function(entities) {
 	hash = entities.hashtags;
@@ -122,38 +153,10 @@ var doBlink = function(entities) {
 	};
 
 	blink(12);
-	// Found the hashtag used
-	/*
-	for(var i = 0; i < hash.length; i++) {
-		// console.log("testing hash");
-		if(!found) {
-			if( hash[i].text == "jpogobelins" ) {
-				// console.log("[tweet] #jpogobelins");
-				// pinToBlink = 11;
-				blink(12);
-				found = true;
-			}
-		}
-		else {
-			blink(pinToBlink);
-		}
- 	} */
 }
 
 /* Twitter - Get followers ids */
 
-/* SOCKETS */
-io.sockets.on('connection', function( socket ) {
-	console.log( c_socket('[socket]') + ' connection ');
-	socket.emit('You are connected ! ');
-
-	/* Detect room */
-	socket.on('channel', function( room ) {
-		console.log( c_socket('[socket]') + ' room request ' + room);
-		socket.emit('You are in room : ', room);
-		socket.join(room);
-	});
-});
 
 //twit.stream('statuses/filter', {'track':'#jpogobelins, #goblins'}, function( stream ) {
 // twit.stream('statuses/filter', {'track':'#gobelins,#jpogobelins,#jpo2013gobelins'}, function( stream ) {
@@ -161,8 +164,15 @@ twit.stream('statuses/filter', {'track':'#ps4'}, function( stream ) {
 	/* on data */
 	stream.on('data',function( data ){
 		console.log(c_main('[main]') +'['+data.created_at+'] '+ c_socket('@'+data.user.screen_name)+'  '+data.text+ ' [#'+data.id_str+']');
+
+		// blink da fucker
 		doBlink(data.entities);
 
+		// add tweet to db
+		tweets.addTweet( data, function( tweet_id ) {
+			console.log(c_rest('[tweet]') + ' Adding tweet with tweet_id ', tweet_id);
+		});
+		// send to socket
 		io.sockets.emit('tree', data);
 
 	});

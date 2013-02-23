@@ -5,7 +5,9 @@ html
 		title "Trees"
 		meta(name='Content-Type', content='text/html', charset='utf-8')
 		script(src='http://code.jquery.com/jquery.min.js')
-		script(src='/javascripts/client.js')
+		script(src="javascripts/processing.js")
+		script(type="text/processing", src="javascripts/tree.js", data-processing-target="processing-canvas" )
+		script(src='javascripts/client.js')
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		block head
 	body
