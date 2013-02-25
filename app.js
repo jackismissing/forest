@@ -37,23 +37,6 @@ var twit = new twitter({
 	access_token_secret: settings.access_token_secret
 });
 
-/* EventDuino */
-var eventduino = require('eventduino');
-var ardy = new eventduino({ serialport: '/dev/tty.usbmodem621' });
-
-ardy.on('get', function (args) {
-  console.log("pin " + args[0] + " is set to " + args[1]);
-});
-
-ardy.on('init', function (args, comment) {
-  console.log('Eventduino init version ' + comment);
-
-  // set the LED pin to HIGH (1)
-  ardy.set(13, 1);
-	setTimeout(function() {
-		ardy.set(13,0)
-	}, 1000);
-});
 
 /* Express - Useful Methods */
 function errorHandler(err, req, res, next) {
@@ -108,7 +91,8 @@ var tweets = new Tweets();
 io.sockets.on('connection', function( socket ) {
 	console.log( c_socket('[socket]') + ' connection ');
 	socket.emit('You are connected ! ');
-
+	
+	// We load all the trees after 5s
 	setTimeout(doSendTrees, 5000);
 
 	/* Detect room */
@@ -137,41 +121,19 @@ var doSendTrees = function(items) {
 	});
 }
 
-var doBlink = function(entities) {
-	hash = entities.hashtags;
-	found = false;
-	pinToBlink = 0;
-
-	var blink = function(pin) {
-		// console.log('pin:', pin);
-		// Blink the pin
-		ardy.set(pin,1);
-		timer = setTimeout(function() {
-			ardy.set(pin,0);
-		}, 500);
-		// clearTimeout(timer);
-	};
-
-	blink(12);
-}
-
 /* Twitter - Get followers ids */
 
 
-//twit.stream('statuses/filter', {'track':'#jpogobelins, #goblins'}, function( stream ) {
-// twit.stream('statuses/filter', {'track':'#gobelins,#jpogobelins,#jpo2013gobelins'}, function( stream ) {
-twit.stream('statuses/filter', {'track':'#ps4'}, function( stream ) {
+ twit.stream('statuses/filter', {'track':'#gobelins,#jpogobelins,#jpo2013gobelins'}, function( stream ) {
 	/* on data */
 	stream.on('data',function( data ){
 		console.log(c_main('[main]') +'['+data.created_at+'] '+ c_socket('@'+data.user.screen_name)+'  '+data.text+ ' [#'+data.id_str+']');
-
-		// blink da fucker
-		doBlink(data.entities);
 
 		// add tweet to db
 		tweets.addTweet( data, function( tweet_id ) {
 			console.log(c_rest('[tweet]') + ' Adding tweet with tweet_id ', tweet_id);
 		});
+
 		// send to socket
 		io.sockets.emit('tree', data);
 

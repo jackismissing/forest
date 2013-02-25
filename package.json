@@ -1,7 +1,7 @@
 {
-	"name": "enmi-zombies",
+	"name": "cdnl-forest",
 	"version": "0.0.1",
-	"description": "#enmsi zombie game",
+	"description": "Virtual forest grown by tweets. Made for the Open Day @ Gobelins, Paris",
 	"author": "cdnlab <3",
 	"private": true,
 	"scripts": {
@@ -11,6 +11,9 @@
 		"express": "3.0.3",
 		"jade": "*",
 		"ntwitter": "*",
-		"mongoose ": "*"
+		"mongoose": "*",
+		"jade": "*",
+		"cli-color": "*",
+		"socket-io": "*"
 	}
 }

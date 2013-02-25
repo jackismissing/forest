@@ -1,6 +1,7 @@
-# #ENMI12 Zombie Game
+# #jpogobelins forest
 
 ## NodeJS + MongoDB + Twitter API
-"Craving for brains !"
+Tweet and plant a virtual tree :)
+=> http://jpo.cdnl.me
 
 This is a temporary ReadMe file. Hell yeah.

@@ -2,8 +2,11 @@
 extends layout
 
 block content
-	h1 #jpogobelins
-	p Tweet and plant a virtual tree :)
-
+	div.desc
+		h1 #jpogobelins
+		p Tweet and plant a virtual tree :)
+		p.last-tweet Dernier Tweet
+			span Blabla
 	div
-	canvas(id="processing-canvas")
+		canvas(id="processing-canvas")
+	

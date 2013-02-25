@@ -40,22 +40,34 @@ function startSocket() {
 		console.log('[tree] : new tree!');
 		/* Add processing drawTree call() */
 		// Processing.getInstanceById('processing-canvas').growTree();
-		createATree();
+		createATree(data);
 	});
 
 	socket.on('trees', function(data) {
 		console.log('[trees] : whole lot of trees!');
 		/* Add processing drawTree call() */
 		for(i = 0; i < data.length; i++) {
-			createATree();
+			createATree(data[i]);
 		}
 
 	});
 
 }
 
-var createATree = function() {
-	Processing.getInstanceById('processing-canvas').growTree();
+var treeNumber = 1;
+var createATree = function(data) {
+	Processing.getInstanceById('processing-canvas').growTree(treeNumber);
+
+	if(data.screen_name === undefined)
+		username = data.user.screen_name;
+	else
+		username = data.screen_name
+
+
+	$('.last-tweet span').fadeOut(500, function() {
+        $(this).text('@'+ username + ' : ' + data.text + '   ['+data.created_at+']').fadeIn(500);
+    });
+    treeNumber++;
 };
 
 /* Unusable at this time */
